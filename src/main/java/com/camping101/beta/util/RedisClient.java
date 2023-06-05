@@ -2,16 +2,15 @@ package com.camping101.beta.util;
 
 import com.amazonaws.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +50,8 @@ public class RedisClient {
     public <T> Optional<T> get(String key, Class<T> classType) {
         try {
             String value = redisTemplate.opsForValue().get(parseToUTF8String(key));
-            return StringUtils.isNullOrEmpty(value)?
-                    Optional.empty() : Optional.of(objectMapper.readValue(value, classType));
+            return StringUtils.isNullOrEmpty(value) ?
+                Optional.empty() : Optional.of(objectMapper.readValue(value, classType));
         } catch (Exception e) {
             e.getStackTrace();
             Arrays.stream(e.getStackTrace()).forEach(x -> log.warn(x.toString()));

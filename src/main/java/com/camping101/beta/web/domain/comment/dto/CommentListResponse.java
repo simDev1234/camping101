@@ -21,9 +21,9 @@ public class CommentListResponse {
     int recordSize = 5;
     List<CommentInfoResponse> comments = new ArrayList<>();
 
-    public static CommentListResponse fromEntity(Page<Comment> comments, CampLog campLog) {
+    public static CommentListResponse fromEntity(Long campLogId, Page<Comment> comments) {
         return CommentListResponse.builder()
-                .campLogId(campLog.getCampLogId())
+                .campLogId(campLogId)
                 .total(comments.getTotalElements())
                 .pageNumber(comments.getNumber())
                 .recordSize(comments.getNumberOfElements())

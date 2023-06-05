@@ -1,11 +1,14 @@
 package com.camping101.beta.web.domain.regtag.dto;
 
 import com.camping101.beta.db.entity.regtag.RecTag;
-import lombok.*;
-import org.springframework.data.domain.Page;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Setter
@@ -21,10 +24,10 @@ public class RecTagListResponse {
 
     public static RecTagListResponse fromEntity(Page<RecTag> response) {
         return RecTagListResponse.builder()
-                .total(response.getTotalElements())
-                .pageNumber(response.getNumber())
-                .recordSize(response.getNumberOfElements())
-                .recTags(response.getContent())
-                .build();
+            .total(response.getTotalElements())
+            .pageNumber(response.getNumber())
+            .recordSize(response.getNumberOfElements())
+            .recTags(response.getContent())
+            .build();
     }
 }

@@ -19,7 +19,7 @@ public class RecTagController {
     private final RecTagService recTagService;
 
     @GetMapping
-    public ResponseEntity<RecTagListResponse> getAllRecTags(RecTagListRequest request){
+    public ResponseEntity<RecTagListResponse> getAllRecTags(RecTagListRequest request) {
 
         RecTagListResponse recTags = recTagService.getAllRecTags(request);
 

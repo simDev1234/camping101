@@ -3,7 +3,7 @@ package com.camping101.beta.web.domain.reservation.exception;
 import lombok.Getter;
 
 @Getter
-public class ReservationException extends RuntimeException{
+public class ReservationException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
@@ -26,7 +26,8 @@ public class ReservationException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
-    public ReservationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ErrorCode errorCode) {
+    public ReservationException(String message, Throwable cause, boolean enableSuppression,
+        boolean writableStackTrace, ErrorCode errorCode) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.errorCode = errorCode;
     }

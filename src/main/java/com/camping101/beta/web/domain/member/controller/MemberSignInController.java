@@ -1,5 +1,6 @@
 package com.camping101.beta.web.domain.member.controller;
 
+import com.camping101.beta.db.entity.member.type.MemberType;
 import com.camping101.beta.web.domain.member.dto.mypage.TemporalPasswordSendRequest;
 import com.camping101.beta.web.domain.member.dto.signin.SignInByEmailRequest;
 import com.camping101.beta.web.domain.member.dto.token.ReissueRefreshTokenRequest;
@@ -34,7 +35,8 @@ public class MemberSignInController {
     private final TemporalPasswordService temporalPasswordService;
 
     @PostMapping("/temporal-password")
-    public ResponseEntity<Void> temporalPasswordSend(@RequestBody TemporalPasswordSendRequest request){
+    public ResponseEntity<Void> temporalPasswordSend(
+        @RequestBody TemporalPasswordSendRequest request) {
 
         temporalPasswordService.sendTemporalPassword(request.getEmail());
 
@@ -45,10 +47,12 @@ public class MemberSignInController {
     public ResponseEntity<Void> emailSignIn(@RequestBody SignInByEmailRequest request,
                                             @ApiIgnore HttpServletResponse response) {
 
+        request.setMemberType(MemberType.CUSTOMER);
+
         TokenInfo tokenInfo = memberSignInService.signInByEmail(request);
 
-        response.setHeader("access_token", tokenInfo.getAccessToken());
-        response.setHeader("refresh_token", tokenInfo.getRefreshToken());
+        response.setHeader("access-token", tokenInfo.getAccessToken());
+        response.setHeader("refresh-token", tokenInfo.getRefreshToken());
 
         return ResponseEntity.ok().build();
     }
@@ -59,17 +63,18 @@ public class MemberSignInController {
         log.info("MemberSignInController.googleSignIn : 구글 인증 코드를 요청합니다.");
 
         String googleAuthCodeUri = String.format("%s?client_id=%s&redirect_uri=%s&scope=%s" +
-                        "&access_type=offline&response_type=code&approval_prompt=force&include_granted_scopes=true",
-                googleAuthorizationUri, googleClientId, googleRedirectUri, googleScope);
+                "&access_type=offline&response_type=code&approval_prompt=force&include_granted_scopes=true",
+            googleAuthorizationUri, googleClientId, googleRedirectUri, googleScope);
 
         log.info(googleAuthCodeUri);
 
         response.sendRedirect(googleAuthCodeUri);
     }
 
-    @GetMapping("/oauth/google") @ApiIgnore
+    @GetMapping("/oauth/google")
+    @ApiIgnore
     public ResponseEntity<TokenInfo> googleSignIn(@RequestParam String code,
-                                                  HttpServletResponse response) {
+        HttpServletResponse response) {
 
         log.info("MemberSignInController.googleSignIn : 구글 인증 코드 \"{}\"", code);
 
@@ -80,17 +85,20 @@ public class MemberSignInController {
         return ResponseEntity.ok(tokenInfo);
     }
 
-    private void addAccessTokenAndRefreshTokenToResponseHeader(HttpServletResponse response, TokenInfo tokenInfo) {
+    private void addAccessTokenAndRefreshTokenToResponseHeader(HttpServletResponse response,
+        TokenInfo tokenInfo) {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("utf-8");
-        response.setHeader("ACCESS_TOKEN", tokenInfo.getAccessToken());
-        response.setHeader("REFRESH_TOKEN", tokenInfo.getRefreshToken());
+        response.setHeader("access-token", tokenInfo.getAccessToken());
+        response.setHeader("refresh-token", tokenInfo.getRefreshToken());
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<ReissueRefreshTokenResponse> refreshTokenReissue(@Valid @RequestBody ReissueRefreshTokenRequest reissueRefreshTokenRequest){
+    public ResponseEntity<ReissueRefreshTokenResponse> refreshTokenReissue(
+        @Valid @RequestBody ReissueRefreshTokenRequest reissueRefreshTokenRequest) {
 
-        ReissueRefreshTokenResponse response = memberSignInService.reissueAccessTokenByRefreshToken(reissueRefreshTokenRequest.getRefreshToken());
+        ReissueRefreshTokenResponse response = memberSignInService.reissueAccessTokenByRefreshToken(
+            reissueRefreshTokenRequest.getRefreshToken());
 
         return ResponseEntity.ok(response);
     }

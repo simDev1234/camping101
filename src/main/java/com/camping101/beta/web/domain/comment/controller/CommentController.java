@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,20 +35,13 @@ public class CommentController {
         return ResponseEntity.ok(commentList);
     }
 
-    @GetMapping("/{commentId}")
-    public ResponseEntity<List<CommentInfoResponse>> getChildrenListOfParentComment(@PathVariable Long commentId){
-
-        List<CommentInfoResponse> reCommentList = commentService.getChildrenListOfParentComment(commentId);
-
-        return ResponseEntity.ok(reCommentList);
-    }
-
-    @PutMapping
-    public ResponseEntity<CommentInfoResponse> updateComment(@RequestBody CommentUpdateRequest request,
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommentInfoResponse> updateComment(@PathVariable Long commentId,
+                                                             @RequestBody CommentUpdateRequest request,
                                                              @ApiIgnore Principal principal){
 
         request.setRequesterEmail(principal.getName());
-        CommentInfoResponse updatedComment = commentService.updateComment(request);
+        CommentInfoResponse updatedComment = commentService.updateComment(commentId, request);
 
         return ResponseEntity.ok(updatedComment);
     }

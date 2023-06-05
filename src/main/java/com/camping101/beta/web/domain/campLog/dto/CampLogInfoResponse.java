@@ -1,12 +1,15 @@
 package com.camping101.beta.web.domain.campLog.dto;
 
 import com.camping101.beta.db.entity.campLog.CampLog;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -37,27 +40,27 @@ public class CampLogInfoResponse {
 
     public static CampLogInfoResponse fromEntity(CampLog campLog) {
         return CampLogInfoResponse.builder()
-                .campLogId(campLog.getCampLogId())
-                .writerEmail(campLog.getMember().getEmail())
-                .writerNickName(campLog.getMember().getNickname())
-                .siteId(campLog.getSite().getSiteId())
-                .visitedAt(campLog.getVisitedAt())
-                .visitedWith(campLog.getVisitedWith())
-                .recTags(Arrays.stream(campLog.getRecTags().split(","))
-                        .collect(Collectors.toList()))
-                .title(campLog.getTitle())
-                .description(campLog.getDescription())
-                .image(campLog.getImage())
-                .image1(campLog.getImage1())
-                .image2(campLog.getImage2())
-                .image3(campLog.getImage3())
-                .image4(campLog.getImage4())
-                .image5(campLog.getImage5())
-                .like(campLog.getLikes())
-                .view(campLog.getView())
-                .createdAt(campLog.getCreatedAt())
-                .updatedAt(campLog.getUpdatedAt())
-                .build();
+            .campLogId(campLog.getCampLogId())
+            .writerEmail(campLog.getMember().getEmail())
+            .writerNickName(campLog.getMember().getNickname())
+            .siteId(campLog.getSite().getSiteId())
+            .visitedAt(campLog.getVisitedAt())
+            .visitedWith(campLog.getVisitedWith())
+            .recTags(Arrays.stream(campLog.getRecTags().split(","))
+                .collect(Collectors.toList()))
+            .title(campLog.getTitle())
+            .description(campLog.getDescription())
+            .image(campLog.getImage())
+            .image1(campLog.getImage1())
+            .image2(campLog.getImage2())
+            .image3(campLog.getImage3())
+            .image4(campLog.getImage4())
+            .image5(campLog.getImage5())
+            .like(campLog.getLikes())
+            .view(campLog.getView())
+            .createdAt(campLog.getCreatedAt())
+            .updatedAt(campLog.getUpdatedAt())
+            .build();
     }
 
 }

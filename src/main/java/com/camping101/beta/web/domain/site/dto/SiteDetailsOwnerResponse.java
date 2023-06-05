@@ -1,14 +1,13 @@
 package com.camping101.beta.web.domain.site.dto;
 
-import com.camping101.beta.web.domain.site.dto.sitedetailsresponse.CampLogDto;
 import com.camping101.beta.db.entity.site.Site;
 import com.camping101.beta.db.entity.site.SiteCapacity;
 import com.camping101.beta.db.entity.site.SiteType;
 import com.camping101.beta.db.entity.site.SiteYn;
+import com.camping101.beta.web.domain.site.dto.sitedetailsresponse.CampLogDto;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.Getter;
 
 @Getter

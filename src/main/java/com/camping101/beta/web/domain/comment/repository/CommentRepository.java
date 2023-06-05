@@ -7,12 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.Optional;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long>, CommentCustomRepository {
 
-    List<Comment> findAllByMemberAndCampLog(Member member, CampLog campLog);
     Page<Comment> findAllByCampLog(CampLog campLog, Pageable pageable);
-    List<Comment> findAllByParentId(Long parentId);
-    long countAllByCampLog(CampLog campLog);
+    //List<Comment> findAllByParentId(Long parentId);
 
 }

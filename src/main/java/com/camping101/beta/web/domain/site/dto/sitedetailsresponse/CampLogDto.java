@@ -2,9 +2,8 @@ package com.camping101.beta.web.domain.site.dto.sitedetailsresponse;
 
 import com.camping101.beta.db.entity.campLog.CampLog;
 import com.camping101.beta.db.entity.regtag.RecTag;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class CampLogDto {

@@ -1,11 +1,15 @@
 package com.camping101.beta.web.domain.campLog.dto;
 
 import com.camping101.beta.db.entity.campLog.CampLog;
-import lombok.*;
-import org.springframework.data.domain.Page;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Setter
@@ -21,12 +25,12 @@ public class CampLogListResponse {
 
     public static CampLogListResponse fromEntity(Page<CampLog> campLogs) {
         return CampLogListResponse.builder()
-                .total(campLogs.getTotalElements())
-                .pageNumber(campLogs.getNumber())
-                .recordSize(campLogs.getNumberOfElements())
-                .campLogs(campLogs.getContent().stream()
-                        .map(CampLogInfoResponse::fromEntity)
-                        .collect(Collectors.toList()))
-                .build();
+            .total(campLogs.getTotalElements())
+            .pageNumber(campLogs.getNumber())
+            .recordSize(campLogs.getNumberOfElements())
+            .campLogs(campLogs.getContent().stream()
+                .map(CampLogInfoResponse::fromEntity)
+                .collect(Collectors.toList()))
+            .build();
     }
 }

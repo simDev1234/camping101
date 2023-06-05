@@ -1,7 +1,11 @@
 package com.camping101.beta.web.domain.admin.member.dto;
 
 import com.camping101.beta.db.entity.member.type.MemberType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

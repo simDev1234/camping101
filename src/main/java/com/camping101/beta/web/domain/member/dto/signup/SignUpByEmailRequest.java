@@ -4,12 +4,12 @@ import com.camping101.beta.db.entity.member.Member;
 import com.camping101.beta.db.entity.member.status.MemberStatus;
 import com.camping101.beta.db.entity.member.type.MemberType;
 import com.camping101.beta.db.entity.member.type.SignUpType;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -28,15 +28,15 @@ public class SignUpByEmailRequest {
 
     public Member toNotActivatedMember(String profileImagePath, String encPassword) {
         return Member.builder()
-                .profileImagePath(profileImagePath)
-                .email(this.email)
-                .password(encPassword)
-                .phoneNumber(this.phoneNumber)
-                .nickname(this.nickname)
-                .signUpType(SignUpType.EMAIL)
-                .memberType(this.memberType)
-                .memberStatus(MemberStatus.NOT_ACTIVATED)
-                .build();
+            .profileImagePath(profileImagePath)
+            .email(this.email)
+            .password(encPassword)
+            .phoneNumber(this.phoneNumber)
+            .nickname(this.nickname)
+            .signUpType(SignUpType.EMAIL)
+            .memberType(this.memberType)
+            .memberStatus(MemberStatus.NOT_ACTIVATED)
+            .build();
     }
 
 }

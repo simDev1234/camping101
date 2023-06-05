@@ -15,6 +15,7 @@ public enum ErrorCode {
     // Sign in
     MEMBER_SIGN_IN_ERROR("로그인이 정상적으로 이루어지지 않았습니다.", HttpStatus.BAD_REQUEST),
     MEMBER_TYPE_NOT_FOUND("회원 타입이 누락되었습니다.", HttpStatus.BAD_REQUEST),
+    MEMBER_TYPE_NOT_MATCHING("로그인 권한이 없습니다.", HttpStatus.BAD_REQUEST),
 
     // update
     MEMBER_UPDATE_ERROR("회원 수정이 불가합니다.", HttpStatus.INTERNAL_SERVER_ERROR),

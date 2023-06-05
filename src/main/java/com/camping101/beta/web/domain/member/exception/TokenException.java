@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class TokenException extends RuntimeException{
+public class TokenException extends RuntimeException {
 
     private final ErrorCode errorCode;
 

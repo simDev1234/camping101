@@ -7,7 +7,15 @@ import com.camping101.beta.web.domain.regtag.dto.RecTagListResponse;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +26,7 @@ public class AdminRecTagController {
     private final AdminRecTagService adminRecTagService;
 
     @PostMapping
-    public ResponseEntity<?> createRecTag(@RequestBody AdminRecTagCreateRequest request){
+    public ResponseEntity<?> createRecTag(@RequestBody AdminRecTagCreateRequest request) {
 
         adminRecTagService.createRecTag(request);
 
@@ -26,7 +34,7 @@ public class AdminRecTagController {
     }
 
     @GetMapping
-    public ResponseEntity<RecTagListResponse> getAllRecTags(RecTagListRequest request){
+    public ResponseEntity<RecTagListResponse> getAllRecTags(RecTagListRequest request) {
 
         RecTagListResponse recTags = adminRecTagService.getAllRecTags(request);
 
@@ -35,7 +43,7 @@ public class AdminRecTagController {
 
     @PatchMapping
     public ResponseEntity<?> activateOrDeactivateRecTag(@RequestParam String name,
-                                                        @RequestParam boolean userYn){
+        @RequestParam boolean userYn) {
 
         adminRecTagService.activateOrDeactivateRecTag(name, userYn);
 
@@ -43,7 +51,7 @@ public class AdminRecTagController {
     }
 
     @DeleteMapping("/{recTagId}")
-    public ResponseEntity<?> deleteRecTag(@PathVariable Long recTagId){
+    public ResponseEntity<?> deleteRecTag(@PathVariable Long recTagId) {
 
         adminRecTagService.deleteRecTag(recTagId);
 

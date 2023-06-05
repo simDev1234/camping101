@@ -3,9 +3,12 @@ package com.camping101.beta.web.domain.member.dto.mypage;
 import com.camping101.beta.db.entity.member.Member;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.*;
-
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -27,13 +30,13 @@ public class MemberInfoResponse implements Serializable {
 
     public static MemberInfoResponse fromEntity(Member member) {
         return MemberInfoResponse.builder()
-                .memberId(member.getMemberId())
-                .image(member.getProfileImagePath())
-                .email(member.getEmail())
-                .nickname(member.getNickname())
-                .phoneNumber(member.getPhoneNumber())
-                .memberType(member.getMemberType().name())
-                .signUpType(member.getSignUpType().name())
-                .build();
+            .memberId(member.getMemberId())
+            .image(member.getProfileImagePath())
+            .email(member.getEmail())
+            .nickname(member.getNickname())
+            .phoneNumber(member.getPhoneNumber())
+            .memberType(member.getMemberType().name())
+            .signUpType(member.getSignUpType().name())
+            .build();
     }
 }

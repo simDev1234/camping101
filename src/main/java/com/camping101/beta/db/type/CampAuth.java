@@ -1,6 +1,5 @@
 package com.camping101.beta.db.type;
 
-import com.camping101.beta.web.domain.admin.campAuth.dto.CampAuthAddResponse;
 import com.camping101.beta.db.entity.camp.Camp;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -14,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,22 +44,11 @@ public class CampAuth {
     @Column(updatable = false, insertable = true)
     private LocalDateTime createdAt;
 
-    public static CampAuth toEntity(Camp camp) {
+    public static CampAuth createCampAuth(Camp camp) {
         return CampAuth.builder()
             .campAuthStatus(CampAuthStatus.UNAUTHORIZED)
             .camp(camp)
             .build();
-    }
-
-    public static CampAuthAddResponse toCampAuthAddResponse(CampAuth campAuth , Camp camp) {
-
-        return CampAuthAddResponse.builder()
-            .campAuthId(campAuth.getCampAuthId())
-            .campId(camp.getCampId())
-            .campName(camp.getName())
-            .campAuthStatus(String.valueOf(campAuth.getCampAuthStatus()))
-            .build();
-
     }
 
     public void editCampAuthStatus() {

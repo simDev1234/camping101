@@ -1,13 +1,13 @@
 package com.camping101.beta.web.domain.member.dto.mypage;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class MemberUpdateRequest {
 
     private MultipartFile profileImage;

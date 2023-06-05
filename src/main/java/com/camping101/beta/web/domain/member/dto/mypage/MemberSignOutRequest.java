@@ -2,11 +2,11 @@ package com.camping101.beta.web.domain.member.dto.mypage;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 @NoArgsConstructor
 @Getter

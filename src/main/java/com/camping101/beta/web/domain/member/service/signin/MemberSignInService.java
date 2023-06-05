@@ -12,7 +12,7 @@ public interface MemberSignInService extends UserDetailsService {
 
     MemberDetails loadUserByUsername(String username);
 
-    boolean isPasswordMatching(MemberDetails memberDetails, String rawPassword);
+    boolean isPasswordMatching(Long memberId, String rawPassword, String encodedPassword);
 
     ReissueRefreshTokenResponse reissueAccessTokenByRefreshToken(String serverRefreshToken);
 

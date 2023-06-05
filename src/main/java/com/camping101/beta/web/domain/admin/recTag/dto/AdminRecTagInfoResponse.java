@@ -1,7 +1,11 @@
 package com.camping101.beta.web.domain.admin.recTag.dto;
 
 import com.camping101.beta.db.entity.regtag.RecTag;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -16,9 +20,9 @@ public class AdminRecTagInfoResponse {
 
     public static AdminRecTagInfoResponse fromEntity(RecTag recTag) {
         return AdminRecTagInfoResponse.builder()
-                .recTagId(recTag.getRecTagId())
-                .name(recTag.getName())
-                .useYn(recTag.isUseYn())
-                .build();
+            .recTagId(recTag.getRecTagId())
+            .name(recTag.getName())
+            .useYn(recTag.isUseYn())
+            .build();
     }
 }

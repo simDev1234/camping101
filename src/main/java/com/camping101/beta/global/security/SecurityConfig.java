@@ -67,31 +67,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
 
             .antMatchers("/api/member", "/api/member/**", "/api/signout")
-            .hasAnyAuthority(MemberType.CUSTOMER.name(), MemberType.ADMIN.name(),
-                MemberType.OWNER.name())
+            .hasAnyAuthority(MemberType.CUSTOMER.name(), MemberType.ADMIN.name(), MemberType.OWNER.name())
 
-            .antMatchers(HttpMethod.GET, "/api/camp/owner/**", "/api/camp/detail/owner/**", "/api/site/owner/**")
-            .hasAnyAuthority(MemberType.OWNER.name())
+//            .antMatchers(HttpMethod.GET, "/api/camp/owner/**", "/api/camp/detail/owner/**", "/api/site/owner/**")
+//            .hasAnyAuthority(MemberType.OWNER.name())
 
-            .antMatchers(HttpMethod.POST, "/api/camp", "api/site/**")
-            .hasAnyAuthority(MemberType.OWNER.name())
+//            .antMatchers(HttpMethod.POST, "/api/camp", "/api/site/**")
+//            .hasAnyAuthority(MemberType.OWNER.name())
 
-            .antMatchers(HttpMethod.PUT, "/api/camp",  "api/site/**")
-            .hasAnyAuthority(MemberType.OWNER.name())
+//            .antMatchers(HttpMethod.PUT, "/api/camp",  "/api/site/**")
+//            .hasAnyAuthority(MemberType.OWNER.name())
+//
+//            .antMatchers(HttpMethod.DELETE, "/api/camp/**",  "/api/site/**")
+//            .hasAnyAuthority(MemberType.OWNER.name())
 
-            .antMatchers(HttpMethod.DELETE, "/api/camp/**",  "api/site/**")
-            .hasAnyAuthority(MemberType.OWNER.name())
-
-            .antMatchers(HttpMethod.GET,"/api/camp/detail/customer/**", "/api/site/customer/**")
-            .hasAuthority(MemberType.CUSTOMER.name())
-
-            .antMatchers("/api/admin/**")
-            .hasAuthority(MemberType.ADMIN.name())
-
-            .antMatchers(ignoreAllPathsStartWith.split(","))
-            .permitAll()
-            .antMatchers(HttpMethod.GET, ignoreGetPathsStartWith.split(","))
-            .permitAll();
+            .antMatchers("/api/admin/rectag", "/api/admin/member")
+            .hasAuthority(MemberType.ADMIN.name());
+//
+//            .antMatchers(ignoreAllPathsStartWith.split(","))
+//            .permitAll()
+//            .antMatchers(HttpMethod.GET, ignoreGetPathsStartWith.split(","))
+//            .permitAll();
     }
 
     @Override
@@ -110,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
 

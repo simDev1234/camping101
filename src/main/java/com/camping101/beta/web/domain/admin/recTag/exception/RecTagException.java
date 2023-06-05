@@ -3,7 +3,7 @@ package com.camping101.beta.web.domain.admin.recTag.exception;
 import lombok.Getter;
 
 @Getter
-public class RecTagException extends RuntimeException{
+public class RecTagException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
@@ -26,7 +26,8 @@ public class RecTagException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
-    public RecTagException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ErrorCode errorCode) {
+    public RecTagException(String message, Throwable cause, boolean enableSuppression,
+        boolean writableStackTrace, ErrorCode errorCode) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.errorCode = errorCode;
     }

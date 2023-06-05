@@ -1,6 +1,11 @@
 package com.camping101.beta.web.domain.comment.dto;
 
-import lombok.*;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -9,7 +14,7 @@ import lombok.*;
 @Builder
 public class CommentUpdateRequest {
 
-    private Long commentId;
+    @ApiModelProperty(hidden = true)
     private String requesterEmail;
     private Long campLogId;
     private String content;

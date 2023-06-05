@@ -1,11 +1,19 @@
 package com.camping101.beta.db.entity.regtag;
 
 import com.camping101.beta.web.domain.admin.recTag.dto.AdminRecTagCreateRequest;
-import lombok.*;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,9 +35,9 @@ public class RecTag {
 
     public static RecTag from(AdminRecTagCreateRequest request) {
         return RecTag.builder()
-                .name(request.getName())
-                .useYn(false)
-                .build();
+            .name(request.getName())
+            .useYn(false)
+            .build();
     }
 
     public void setUseYn(boolean useYn) {

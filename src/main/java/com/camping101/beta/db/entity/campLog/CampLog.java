@@ -1,11 +1,23 @@
 package com.camping101.beta.db.entity.campLog;
 
 import com.camping101.beta.db.entity.bookMark.BookMark;
-import com.camping101.beta.web.domain.campLog.dto.CampLogCreateRequest;
-import com.camping101.beta.web.domain.campLog.dto.CampLogUpdateRequest;
 import com.camping101.beta.db.entity.comment.Comment;
 import com.camping101.beta.db.entity.member.Member;
 import com.camping101.beta.db.entity.site.Site;
+import com.camping101.beta.web.domain.campLog.dto.CampLogCreateRequest;
+import com.camping101.beta.web.domain.campLog.dto.CampLogUpdateRequest;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +25,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -71,13 +79,14 @@ public class CampLog {
             bookMark.changeCampLog(this);
         }
     }
+
     public static CampLog from(CampLogCreateRequest request) {
         return CampLog.builder()
-                .visitedAt(request.getVisitedAt())
-                .visitedWith(request.getVisitedWith())
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .build();
+            .visitedAt(request.getVisitedAt())
+            .visitedWith(request.getVisitedWith())
+            .title(request.getTitle())
+            .description(request.getDescription())
+            .build();
     }
 
     public void changeImagePaths(List<String> imagePaths) {
@@ -89,7 +98,7 @@ public class CampLog {
         this.image5 = imagePaths.get(5);
     }
 
-    public void changeRecTags(String recTags){
+    public void changeRecTags(String recTags) {
         this.recTags = recTags;
     }
 
@@ -100,6 +109,7 @@ public class CampLog {
     public void changeSite(Site site) {
         this.site = site;
     }
+
     public void addComment(Comment comment) {
         this.comments.add(comment);
         if (comment.getCampLog() != this) {

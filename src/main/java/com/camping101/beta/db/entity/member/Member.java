@@ -4,10 +4,20 @@ import com.camping101.beta.db.entity.BaseEntity;
 import com.camping101.beta.db.entity.member.status.MemberStatus;
 import com.camping101.beta.db.entity.member.type.MemberType;
 import com.camping101.beta.db.entity.member.type.SignUpType;
-import lombok.*;
-import org.hibernate.envers.AuditOverride;
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.envers.AuditOverride;
 
 @Entity
 @Getter
@@ -16,7 +26,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AuditOverride(forClass = BaseEntity.class)
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

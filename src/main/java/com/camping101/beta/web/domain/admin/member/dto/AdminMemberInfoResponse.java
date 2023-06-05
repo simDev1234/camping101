@@ -4,8 +4,12 @@ import com.camping101.beta.db.entity.member.Member;
 import com.camping101.beta.db.entity.member.status.MemberStatus;
 import com.camping101.beta.db.entity.member.type.MemberType;
 import com.camping101.beta.db.entity.member.type.SignUpType;
-import lombok.*;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -27,17 +31,17 @@ public class AdminMemberInfoResponse {
 
     public static AdminMemberInfoResponse fromEntity(Member member) {
         return AdminMemberInfoResponse.builder()
-                .memberId(member.getMemberId())
-                .image(member.getProfileImagePath())
-                .email(member.getEmail())
-                .nickname(member.getNickname())
-                .phoneNumber(member.getPhoneNumber())
-                .memberType(member.getMemberType())
-                .signUpType(member.getSignUpType())
-                .memberStatus(member.getMemberStatus())
-                .createdAt(member.getCreatedAt())
-                .deletedAt(member.getDeletedAt())
-                .build();
+            .memberId(member.getMemberId())
+            .image(member.getProfileImagePath())
+            .email(member.getEmail())
+            .nickname(member.getNickname())
+            .phoneNumber(member.getPhoneNumber())
+            .memberType(member.getMemberType())
+            .signUpType(member.getSignUpType())
+            .memberStatus(member.getMemberStatus())
+            .createdAt(member.getCreatedAt())
+            .deletedAt(member.getDeletedAt())
+            .build();
     }
 
 }

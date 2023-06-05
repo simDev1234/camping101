@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonNaming(PropertyNamingStrategies.KebabCaseStrategy.class)
 public class ReissueRefreshTokenRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;

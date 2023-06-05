@@ -3,7 +3,7 @@ package com.camping101.beta.web.domain.camp.exception;
 import lombok.Getter;
 
 @Getter
-public class CampException extends RuntimeException{
+public class CampException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
@@ -26,7 +26,8 @@ public class CampException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
-    public CampException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ErrorCode errorCode) {
+    public CampException(String message, Throwable cause, boolean enableSuppression,
+        boolean writableStackTrace, ErrorCode errorCode) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.errorCode = errorCode;
     }

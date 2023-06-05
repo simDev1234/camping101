@@ -1,21 +1,14 @@
 package com.camping101.beta.web.domain.bookMark.service;
 
-import static com.camping101.beta.web.domain.bookMark.exception.ErrorCode.BOOKMARK_NOT_FOUND;
-
-import com.camping101.beta.web.domain.bookMark.dto.BookMarkCreateRequest;
-import com.camping101.beta.web.domain.bookMark.dto.BookMarkCreateResponse;
-import com.camping101.beta.web.domain.bookMark.dto.BookMarkListResponse;
 import com.camping101.beta.db.entity.bookMark.BookMark;
-import com.camping101.beta.web.domain.bookMark.exception.BookMarkException;
-import com.camping101.beta.web.domain.bookMark.repository.BookMarkRepository;
 import com.camping101.beta.db.entity.campLog.CampLog;
-import com.camping101.beta.web.domain.campLog.repository.CampLogRepository;
 import com.camping101.beta.db.entity.member.Member;
-import com.camping101.beta.web.domain.member.repository.MemberRepository;
-
+import com.camping101.beta.web.domain.bookMark.dto.CreateBookMarkRq;
+import com.camping101.beta.web.domain.bookMark.dto.CreateBookMarkRs;
+import com.camping101.beta.web.domain.bookMark.repository.BookMarkRepository;
+import com.camping101.beta.web.domain.campLog.service.FindCampLogService;
+import com.camping101.beta.web.domain.member.service.FindMemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,21 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookMarkService {
 
     private final BookMarkRepository bookMarkRepository;
-    private final CampLogRepository campLogRepository;
-    private final MemberRepository memberRepository;
+    private final FindCampLogService findCampLogService;
+    private final FindMemberService findMemberService;
+    private final FindBookMarkService findBookMarkService;
 
     // 북마크 생성
-    public BookMarkCreateResponse registerBookMark(BookMarkCreateRequest bookMarkCreateRequest) {
+    public CreateBookMarkRs registerBookMark(CreateBookMarkRq rq) {
 
-        CampLog findCampLog = campLogRepository.findById(bookMarkCreateRequest.getCampLogId())
-            .orElseThrow(() -> {
-                throw new RuntimeException("존재하는 캠프로그가 없습니다");
-            });
+        CampLog findCampLog = findCampLogService.findCampLogOrElseThrow(rq.getCampLogId());
 
-        Member findMember = memberRepository.findById(bookMarkCreateRequest.getMemberId())
-            .orElseThrow(() -> {
-                throw new RuntimeException("존재하는 회원이 없습니다");
-            });
+        Member findMember = findMemberService.findMemberOrElseThrow(rq.getMemberId());
 
         BookMark bookMark = new BookMark();
 
@@ -48,30 +36,14 @@ public class BookMarkService {
         bookMark.changeCampLog(findCampLog);
         bookMark.changeMember(findMember);
 
-        return BookMark.toBookMarkCreateResponse(bookMark);
-
+        return CreateBookMarkRs.createBookMarkRs(bookMark);
     }
 
-    // 북마크 목록 조회
-    @Transactional(readOnly = true)
-    public Page<BookMarkListResponse> findBookMarkList(Long memberId, Pageable pageable) {
-
-        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> {
-            throw new RuntimeException("존재하는 회원이 없습니다");
-        });
-
-        Page<BookMark> bookMarkList = bookMarkRepository.findBookMarkByMember(findMember, pageable);
-
-        return bookMarkList.map(BookMark::toBookMarkListResponse);
-
-    }
 
     // 북마크 삭제
     public void removeBookMark(Long bookmarkId) {
 
-        BookMark findBookMark = bookMarkRepository.findById(bookmarkId).orElseThrow(() -> {
-            throw new BookMarkException(BOOKMARK_NOT_FOUND);
-        });
+        BookMark findBookMark = findBookMarkService.findBookMarkOrElseThrow(bookmarkId);
 
         bookMarkRepository.delete(findBookMark);
 

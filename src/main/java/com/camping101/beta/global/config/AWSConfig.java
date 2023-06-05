@@ -22,12 +22,12 @@ public class AWSConfig {
     @Value("{cloud.aws.region.static}")
     private String region;
 
-    public AmazonS3 amazonS3(){
+    public AmazonS3 amazonS3() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .build();
+            .withRegion(region)
+            .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+            .build();
     }
 
 }

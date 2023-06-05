@@ -5,13 +5,15 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import java.io.IOException;
+import java.util.UUID;
+
+import com.querydsl.core.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -24,28 +26,39 @@ public class S3FileUploader {
 
     public String uploadFileAndGetURL(MultipartFile multipartFile) {
 
-       try {
+        if (multipartFile.isEmpty() || StringUtils.isNullOrEmpty(multipartFile.getOriginalFilename())) {
+            return "";
+        }
 
-           String originalFileName = multipartFile.getOriginalFilename();
-           String extension = getExtension(originalFileName);
-           String contentType = getContentType(extension);
-           String changedFilename = UUID.randomUUID().toString().replace("-", "") + "." + extension;
+        try {
 
-           ObjectMetadata metadata = new ObjectMetadata();
-           metadata.setContentType(contentType);
+            String originalFileName = multipartFile.getOriginalFilename();
+            String extension = getExtension(originalFileName);
+            String contentType = getContentType(extension);
+            String changedFilename =
+                UUID.randomUUID().toString().replace("-", "").replace("_","") + "." + extension;
 
-           amazonS3.putObject(new PutObjectRequest(bucket, changedFilename, multipartFile.getInputStream(), metadata)
-                   .withCannedAcl(CannedAccessControlList.PublicRead));
-           return amazonS3.getUrl(bucket, changedFilename).toString();
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(contentType);
 
-       } catch(IOException | SdkClientException e) {
+            amazonS3.putObject(
+                new PutObjectRequest(bucket, changedFilename, multipartFile.getInputStream(),
+                    metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            return amazonS3.getUrl(bucket, changedFilename).toString();
 
-           log.info("이미지 저장 실패 : 연결 이상");
+        } catch (IOException | SdkClientException e) {
 
-       } catch(Exception e) {
+            log.info("이미지 저장 실패 : 연결 이상");
 
-           log.info("이미지 저장 실패 : (이미지가 없을 가능성이 높습니다.)" + e.getMessage());
-       }
+            e.printStackTrace();
+
+        } catch (Exception e) {
+
+            log.info("이미지 저장 실패 : (이미지가 없을 가능성이 높습니다.)" + e.getMessage());
+
+            e.printStackTrace();
+        }
 
         return "";
     }
@@ -56,15 +69,26 @@ public class S3FileUploader {
         return extension;
     }
 
-    private String getContentType(String extension){
+    private String getContentType(String extension) {
 
         String contentType = "";
 
         switch (extension) {
-            case "jpeg" : contentType = "image/jpeg"; break;
-            case "png"  : contentType = "image/png"; break;
-            case "txt"  : contentType = "text/txt"; break;
-            case "csv"  : contentType = "text/csv"; break;
+            case "jpg":
+                contentType = "image/jpg";
+                break;
+            case "jpeg":
+                contentType = "image/jpeg";
+                break;
+            case "png":
+                contentType = "image/png";
+                break;
+            case "txt":
+                contentType = "text/txt";
+                break;
+            case "csv":
+                contentType = "text/csv";
+                break;
         }
 
         return contentType;

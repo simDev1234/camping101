@@ -192,7 +192,7 @@ public class GoogleOAuthService implements OAuthService {
 
             restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
             URI uri = baseUriOf(googleRevokeUri);
-            String googleAccessToken = "tokenService."; // TODO
+            String googleAccessToken = "tokenService.";
             HttpEntity<MultiValueMap<String, String>> request = postRevokeRequest(googleAccessToken);
             restTemplate.postForEntity(uri, request, String.class);
 

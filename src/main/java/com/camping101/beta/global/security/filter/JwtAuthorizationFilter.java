@@ -1,5 +1,9 @@
 package com.camping101.beta.global.security.filter;
 
+import static com.camping101.beta.global.security.SecurityConfig.AUTHORIZATION_HEADER;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
+
 import com.camping101.beta.global.security.authentication.MemberDetails;
 import com.camping101.beta.util.FilterResponseHandler;
 import com.camping101.beta.web.domain.member.service.token.TokenService;
@@ -7,23 +11,18 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import java.io.IOException;
+import java.util.Arrays;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
-
-import static com.camping101.beta.global.security.SecurityConfig.AUTHORIZATION_HEADER;
-import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -34,7 +33,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final String ignoreGetPathsStartWith;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
 
         String accessToken = request.getHeader(AUTHORIZATION_HEADER);
 
@@ -47,29 +47,36 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         } else if (!tokenService.isNotBlankAndStartsWithBearer(accessToken)) {
 
-            FilterResponseHandler.sendFilterExceptionResponse(response, "헤더에 Access Token이 없습니다.", SC_BAD_REQUEST);
+            FilterResponseHandler.sendFilterExceptionResponse(response, "헤더에 Access Token이 없습니다.",
+                SC_BAD_REQUEST);
 
         } else {
 
             try {
 
-                MemberDetails memberDetails = tokenService.getMemberDetailsByAccessToken(accessToken);
+                MemberDetails memberDetails = tokenService.getMemberDetailsByAccessToken(
+                    accessToken);
 
-                if (tokenService.isAccessTokenInBlackList(memberDetails.getMemberId(), accessToken)) {
-                    FilterResponseHandler.sendFilterExceptionResponse(response, "로그아웃된 Access Token 입니다.", SC_BAD_REQUEST);
+                if (tokenService.isAccessTokenInBlackList(memberDetails.getMemberId(),
+                    accessToken)) {
+                    FilterResponseHandler.sendFilterExceptionResponse(response,
+                        "로그아웃된 Access Token 입니다.", SC_BAD_REQUEST);
                 }
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetails, null, memberDetails.getAuthorities());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    memberDetails, null, memberDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 filterChain.doFilter(request, response);
 
-            } catch(ExpiredJwtException e){
+            } catch (ExpiredJwtException e) {
 
-                FilterResponseHandler.sendFilterExceptionResponse(response, "만료된 Access Token 입니다.", SC_UNAUTHORIZED);
+                FilterResponseHandler.sendFilterExceptionResponse(response, "만료된 Access Token 입니다.",
+                    SC_UNAUTHORIZED);
 
             } catch (MalformedJwtException | SignatureException | UnsupportedJwtException e) {
 
-                FilterResponseHandler.sendFilterExceptionResponse(response, "잘못된 Access Token 입니다.", SC_BAD_REQUEST);
+                FilterResponseHandler.sendFilterExceptionResponse(response, "잘못된 Access Token 입니다.",
+                    SC_BAD_REQUEST);
 
             }
         }
@@ -79,9 +86,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return isPermittedAllPath(servletPath) || isPermittedGetPath(servletPath, httpMethod);
     }
 
-    private boolean isPermittedAllPath(String servletPath){
+    private boolean isPermittedAllPath(String servletPath) {
 
-        boolean result = Arrays.stream(ignoreAllPathsStartWith.split(",")).filter(x -> servletPath.startsWith(x)).count() >= 1;
+        boolean result =
+            Arrays.stream(ignoreAllPathsStartWith.split(",")).filter(x -> servletPath.startsWith(x))
+                .count() >= 1;
 
         log.info("JwtAuthorizationFilter.isPermittedAllPath ? {} -> {}", servletPath, result);
 
@@ -90,7 +99,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private boolean isPermittedGetPath(String servletPath, String httpMethod) {
         String[] permitGetPaths = ignoreGetPathsStartWith.split(",");
-        if ("GET".equals(httpMethod) == false) return false;
+        if ("GET".equals(httpMethod) == false) {
+            return false;
+        }
         return Arrays.stream(permitGetPaths).filter(x -> servletPath.startsWith(x)).count() >= 1;
     }
 

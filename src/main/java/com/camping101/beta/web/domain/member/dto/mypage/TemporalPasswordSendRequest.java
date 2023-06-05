@@ -1,8 +1,9 @@
 package com.camping101.beta.web.domain.member.dto.mypage;
 
-import lombok.*;
-
 import java.io.Serializable;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

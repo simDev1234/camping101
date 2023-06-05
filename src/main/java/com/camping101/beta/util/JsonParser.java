@@ -12,11 +12,13 @@ public class JsonParser {
 
     private final ObjectMapper objectMapper;
 
-    public <T> T parseJsonToObject(String jsonString, Class<T> classType) throws JsonProcessingException {
+    public <T> T parseJsonToObject(String jsonString, Class<T> classType)
+        throws JsonProcessingException {
         return objectMapper.readValue(jsonString, classType);
     }
 
-    public <T> T parseJsonPayloadToObject(String jsonString, Class<T> classType) throws JsonProcessingException{
+    public <T> T parseJsonPayloadToObject(String jsonString, Class<T> classType)
+        throws JsonProcessingException {
 
         String payload = jsonString.split("\\.")[1];
         String decodedPayload = new String(Base64Utils.decodeFromUrlSafeString(payload));

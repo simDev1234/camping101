@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import java.time.LocalDateTime;
 
 @RedisHash(value = "temporalPassword", timeToLive = 60L * 5) // 5분
 @Getter
