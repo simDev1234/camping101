@@ -4,8 +4,7 @@
 ```bash
 logging system failed to initialize using configuration from 'null'
 ```
-- 원인 : ./logs/info.log에 대한 쓰기 권한이 없음 
-  서버 프로세스에서 에러가 발생할 때, Logback에 의해 ./logs 디렉토리에 info.log로 로그를 남기게 되는데,       
+- 원인 : ./logs/info.log에 대한 쓰기 권한이 없음. 서버 프로세스에서 에러가 발생할 때, Logback에 의해 ./logs 디렉토리에 info.log로 로그를 남기게 되는데,       
   서버를 배포한 사용자에게는 해당 경로에 접근하여 파일을 쓸 수 있는 권한이 없기 때문에 발생한 문제였다.
 - 해결과정 : 
   단순하게 해결한다면, "sudo chmod 777 {dir or file}" 을 사용하면 이 문제를 해결할 수 있었는데, <br>
@@ -52,9 +51,10 @@ logging system failed to initialize using configuration from 'null'
 
 <br>
 
-## ISSUE 2 : AWS 인바이드 규칙에 IP 주소를 추가하였으나 접속 불가
+## ISSUE 2 : AWS 인바운드 규칙에 IP 주소를 추가하였으나 접속 불가
 - 원인 : 추가했던 IPv4 주소가 공유기에서 임시 발급한 사설 IP 주소였음을 확인 (IpConfig로 확인한 주소)
-- 해결 : whatismyip 웹사이트를 통해 공용 IP 주소를 확인하여 수정
+- 해결 : whatismyip 웹사이트를 통해 공용 IP 주소를 확인하여 수정 후 해결했다. <br>
+  그러면 여기서 공용 IP와 사설 IP는 무엇일까..? IP주소는 말 그대로 데이터를 전달하는 도착지 주소를 말하는데, 이 중, 공용 IP는 인터넷 업체가 사용자에게 할당하는 IP를 말했다. 곧 내 방의 공유기에 할당되는 외부 IP를 의미했다. 내가 방에 있는 windows cmd 창을 열어서 IpConfig를 입력해 받은 사설 IP는 내 컴퓨터가 공유기로부터 할당 받은 주소를 의미했다. 결국, 진짜배기 IP는 whatismyip에 있는 외부 공용 IP였고, 이를 AWS EC2 인바운드 규칙에 넣어주어야만 접속이 가능한 것이었다. 팀원들의 공용 IP를 받아 넣으니 바로 해결됐다.
 
 <br>
 
