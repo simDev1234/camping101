@@ -71,7 +71,7 @@ logging system failed to initialize using configuration from 'null'
 <br>
 
 ## ISSUE 4 : Security ProviderNotFoundException for UsernamePasswordAuthenticationToken
-- 원인 : SpringSecurity의 기본 AuthenticationProvider를 확장한 CustomAuthenticationProvider클래스에서 AuthenticationProvider의 supports 메소드에 커스텀 AuthenticationToken을 지정해주지 않아서 나타난 이슈였다. 일단 SpringSecurity의 기본 UsernamePassword 인증 절차를 풀이하면 다음과 같았다. <br>
+- 원인 : SpringSecurity의 기본 AuthenticationProvider를 확장한 '커스텀 AuthenticationProvider'클래스에서 AuthenticationProvider의 supports 메소드에 '커스텀 AuthenticationToken'을 지정해주지 않아서 나타난 이슈였다. 일단 SpringSecurity의 기본 UsernamePassword 인증 절차를 풀이하면 다음과 같았다. <br>
   ```bash
   Spring Security의 기본 UsernamePassword 동작방식
   [1] client가 http를 통해 username과 password를 전달한다.
