@@ -107,27 +107,34 @@ public boolean supports(Class<?> authentication) {
 [http-nio-8080-exec-7] org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver Resolved 
 [org.springdiaTypeNotSupportedException: Content type 'application/x-www-form-urlencoded;charset=UTF-8' not supported]
 ```
-- 원인 : swagger에서 GET 요청 타입을 디폴트인 x-www-form-urlencoded로 전송
+- 원인 : swagger에서 GET 요청 타입을 디폴트인 x-www-form-urlencoded로 전송. <br>
+  Swagger는 요청 데이터 타입을 지정해주지 않으면 기본적으로 x-www-form-urlencoded로 데이터를 전송했다. 
+  따라서 json타입의 요청값을 받기 위해서는 아래와 같이 comsumes()라고 하는 메소드에 json 타입을 추가해야 하며,
+  마찬가지로 json타입의 응답값에 받기 위해서는 아래와 같이 produces()라는 메소드에 json 타입을 추가해야 했다. 
+  차후에 multipart/formData에 대해서도 같은 방식으로 요청/응답이 가능하도록 추가해주었다.
+  더불어 기존의 x-www-form-urlencoded값도 함께 추가해주었다.
 - 해결 : swagger config 설정을 아래와 같이 변동
 ```java
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SPRING_WEB)
-                .host(host.substring(7))
-                .consumes(getConsumeContentTypes())  // 요청 타입 추가
-                .produces(getProduceContentTypes())  // 응답 타입 추가
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.camping101.beta"))
-                .paths(PathSelectors.any())
-                .build()
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()));
+        return new Docket(DocumentationType.OAS_30)
+            .host(host.substring(7))
+            .consumes(getConsumeContentTypes())
+            .produces(getProduceContentTypes())
+            .apiInfo(apiInfo())
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.camping101.beta"))
+            .paths(PathSelectors.any())
+            .build()
+            .securityContexts(Arrays.asList(securityContext()))
+            .securitySchemes(Arrays.asList(apiKey()));
     }
 
     private Set<String> getConsumeContentTypes() {
         Set<String> consumes = new HashSet<>();
         consumes.add("application/json;charset=UTF-8");
+        consumes.add("application/x-www-form-urlencoded;charset=UTF-8");
+        consumes.add("multipart/form-data;charset=UTF-8");
         return consumes;
     }
 
