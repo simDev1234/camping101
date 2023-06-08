@@ -4,9 +4,9 @@
 ```bash
 logging system failed to initialize using configuration from 'null'
 ```
-- 원인 : Logback이 ./logs/info.log에 대한 쓰기 권한이 없음 
+- 원인 : ./logs/info.log에 대한 쓰기 권한이 없음 
   서버 프로세스에서 에러가 발생할 때, Logback에 의해 ./logs 디렉토리에 info.log로 로그를 남기게 되는데,       
-  서버 프로세스가 해당 경로에 접근하여 파일을 쓸 수 있는 권한이 없기 때문에 발생한 문제였다.
+  서버를 배포한 사용자에게는 해당 경로에 접근하여 파일을 쓸 수 있는 권한이 없기 때문에 발생한 문제였다.
 - 해결과정 : 
   단순하게 해결한다면, "sudo chmod 777 {dir or file}" 을 사용하면 이 문제를 해결할 수 있었는데, <br>
   왜 운영체제는 이러한 권한을 부여하는지와, 리눅스와 윈도우의 파일 권한 변경 과정을 비교하고 싶었다.<br><br>
@@ -47,7 +47,8 @@ logging system failed to initialize using configuration from 'null'
   sudo groupadd deployer
   sudo chown ubuntu:deployer libs
   ```
-  이렇게 하고 java jar beta(생략).jar을 하니, 이번에는 정상적으로 작동이 됐다.
+  이렇게 하고 java jar beta(생략).jar을 하니, 이번에는 정상적으로 작동이 됐다. <br>
+  결국 Logback이 정상적으로 실행되기 위해서는 배포하는 사용자에게 root에게 있었던 파일 저장 권한을 주면 해결이 되는 이슈였다.
 
 <br>
 
