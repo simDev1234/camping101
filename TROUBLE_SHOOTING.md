@@ -58,17 +58,51 @@ logging system failed to initialize using configuration from 'null'
 
 <br>
 
-## ISSUE 3 : 캠핑장 삭제 시 DataIntegrityViolationException 발생
-```bash
-DataIntegrityViolationException could not execute statement
-``` 
-- 원인 : 캠핑장 삭제시 캠핑장 승인 테이블의 속성에 camp_id가 남아있어 무결성 문제로 예외 발생
-- 해결 : CampAuth -> Camp 단방향 연관관계에서, CampAuth <-> Camp 양방향 연관관계로 변경 후, <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Camp 엔터티의 CampAuth List 필드에 cascade = CascadeType.Remove 속성 추가
+## ISSUE 3 : 프리티어로 AWS에 배포 시 너무 느리게 배포가 되는 현상
+- 원인 : AWS EC2에서 사용할 수 있는 용량이 한정되어 있는데, 프로그램 용량이 그 보다 높아 메모리 부족으로 배포가 느려지는 현상이었다. 
+- 해결 : 처음에는 원인을 알 수 없었는데 프리티어 용량을 확인해보니 메모리가 30GB 밖에 되지 않는다는 걸 보았고, 실제로 AWS CPU 사용률을 보니 100%에 가까웠다. <br>
+  무료를 포기할 수가 없어서 Swap 파일을 생성해서 메모리 이슈를 해결해 보는 방안을 찾아보았다. (그러나 여전히 CPU는 제자리였다.) <br>
+  프론트에서 API 테스트를 해야했기 때문에 일단은 ngrok을 사용해서 local PC에 접속할 수 있도록 하였다. <br>
+  그리고 회의를 거쳐 팀원들과 함께 협의해 약간의 비용을 주더라도 서버를 업그레이드하여 편안하게 배포를 하기로 했다. <br>
+
+<br>
+
+## ISSUE 4 : Security ProviderNotFoundException for UsernamePasswordAuthenticationToken
+- 원인 : SpringSecurity의 기본 AuthenticationProvider를 확장한 CustomAuthenticationProvider클래스에서 AuthenticationProvider의 supports 메소드에 커스텀 AuthenticationToken을 지정해주지 않아서 나타난 이슈였다. 일단 SpringSecurity의 기본 UsernamePassword 인증 절차를 풀이하면 다음과 같았다. <br>
+  ```bash
+  Spring Security의 기본 UsernamePassword 동작방식
+  [1] client가 http를 통해 username과 password를 전달한다.
+  [2] SpringSecurity의 FilterProxy가 일련의 Filter를 거치게 하는데, 그 중
+  [3] UsernamePasswordAuthenticationFilter의 attemptAuthentication 메소드를 통해 username, password을 UsernamePasswordAuthenticationToken에 담는다.
+      * UsernamePasswordAuthenticationFilter는 AbstractAuthenticationProcessingFilter를 상속하며, 상위 Filter의 attemptAuthentication을 Override했다.
+      * UsernamePasswordAuthenticationToken은 AbstractAuthenticationToken을 상속했으며, 해당 상위 클래스는 principal(아이디)과 credentials(비번)를 갖는다.
+        인증 절차가 이루어지기 전에는 이 principal과 password만 받는다면, 인증 절차가 이루어진 후에는 principal, password에 GrantedAuthorities를 담은 Collection 정보가 추가된다.
+        AbstractAuthenticationToken은 또한 Authentication과 CredentialContainer를 구현하고 있는데, authorities : Collection<GrantedAutority>, details : Object, authenticated : boolean를 갖는다. 
+        결과적으로 UsernamePasswordAuthenticationToken은 곧 SecurityHolder에 담길 Authentication의 확장을 의미한다.
+  [4] AuthenticationManager는 Authentication을 받아 실제 구현체인 AuthenticationProvider에게 전달한다.
+      * AuthenticationManager는 인터페이스이며, authenticate와 supports라는 메소드를 갖고 있다. 이 인터페이스를 구현한 것이 ProviderManger이다. 
+      * ProviderManager의 authenticate 메소드 내부에서는 각각의 AuthenticationProvider를 조회하며 특정 Authentication 구현체를 supports하는 AuthenticationProvider를 찾는다
+  [5] DaoAuthenticationProvider(AbstractUserDetailsAuthenticationProvider)를 통해 실질적인 인증 절차가 이루어지며 UsernamePasswordAuthenticationToken이 생성된다.
+      * 기본 설정된 AbstractUserDetailsAuthenticationProvider는 UsernamePasswordAuthenticationToken을 supports하는 AuthenticationProvider이다.
+      * 이 Provider를 또다시 상속한 것이 DaoAuthenticationProvider인데, 이 클래스는 addtionalAuthenticationCheck()와 retrieveUser() 메소를 갖고 있다. 
+        retrieveUser()는 UserDetailsService로부터 UserDetails를 가져오며, additionalAuthenticationCheck()는 입력 정보와 UserDetails의 정보를 비교해 인증을 체크한다.
+        만약, 두 정보가 일치한다면, createSuccessfulAuthenticaion()을 통해 UsernamePasswordAuthenticationToken에 principal, password, details 정보가 담겨 반환된다. 
+  [6] [5]에서 반환된 UsernamePasswordAuthenticationToken은 Authentication 객체로 다시 [3]의 필터에 넘겨진다. 그렇게 넘겨진 Authentication은 UsernamePasswordAuthenticationFilter의 successfulAthentication() 메소드를 통해 SpringSecurityHolder에 담겨지게 되고, 이 때 담겨진 Authentication 정보는 Controller 클래스에서 Principal 및 UserDetails 등을 통해 가져올 수 있게 된다.
+  ```
+- 해결 : 나의 경우, UsernamePasswordAuthenticationFilter를 상속하여 JwtAuthenticationFilter를 만들었고, <br>
+  기존의 UsernamePasswordAuthenticationtoken을 그대로 사용하였으며, <br>
+  AuthenticationProvider를 확장하여 UsernamePasswordAuthenticationProvider라는 커스텀 Provider를 만들었다.<br>
+  ProviderManger가 UsernamePasswordAuthenticationToken을 사용하는 UsernamePasswordAuthencationProvider를 찾기 위해서는 아래와 같이 supports에 UsernamePasswordAuthenticationToken.class를 할당할 수 있는지 확인해야 했다. 아래와 같이 고치니 잘 동작했다.
+```java
+@Override
+public boolean supports(Class<?> authentication) {
+    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+}
+```
 
 <br>
  
-## ISSUE 4 : GET 요청 시 아래와 같은 예외 발생
+## ISSUE 5 : GET 요청 시 아래와 같은 예외 발생
 ```bash
 [http-nio-8080-exec-7] org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver Resolved 
 [org.springdiaTypeNotSupportedException: Content type 'application/x-www-form-urlencoded;charset=UTF-8' not supported]
@@ -106,7 +140,7 @@ DataIntegrityViolationException could not execute statement
 
 <br>
 
-## ISSUE 5 : Swagger 요청 시 400 에러
+## ISSUE 6 : Swagger 요청 시 400 에러
 ![img.png](.github/img/swagger-error.png)
 - 원인 : "/webjars" 하위 경로에 대한 접근 허용 X 
 - 해결 : swagger의 WebSecurity ignore 경로의 "/webjars/"를 "/webjars/**"로 변경 
@@ -123,12 +157,4 @@ public void configure(WebSecurity web) {
 
 <br>
 
-## ISSUE 6 : Security ProviderNotFoundException for UsernamePasswordAuthenticationToken
-- 원인 : CustomAuthenticationProvider의 supports 부분에 UsernamePasswordAuthenticationToken으로 설정하지 않았음
-- 해결 : 아래와 같이 코드 수정하여 해결
-```java
-@Override
-public boolean supports(Class<?> authentication) {
-    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-}
-```
+
