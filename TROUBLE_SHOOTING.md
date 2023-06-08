@@ -47,10 +47,10 @@ logging system failed to initialize using configuration from 'null'
   이번에는 배포 그룹을 생성해서 현재 접속한 사용자(ubuntu)를 그룹에 포함하고 해당 그룹에 libs 디렉토리에 대한 권한을 부여했다. <br>
   ```bash
   sudo groupadd deployer
-  sudo chown ubuntu:deployer libs
+  sudo chown ubuntu:deployer libs  <--- chwon으로 libs의 소유자를 root에서 ubuntu로 변경
   ```
   이렇게 하고 java jar beta(생략).jar을 하니, 이번에는 정상적으로 작동이 됐다. <br>
-  결국 Logback이 정상적으로 실행되기 위해서는 배포하는 사용자에게 root에게 있었던 파일 저장 권한을 주면 해결이 되는 이슈였다.
+  결국 Logback이 정상적으로 실행되기 위해서는 배포하는 사용자에게 root에게 있었던 libs디렉토리 파일 저장 권한을 주면 해결이 되는 이슈였다.
 
 <br>
 
