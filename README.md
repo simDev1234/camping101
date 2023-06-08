@@ -4,8 +4,10 @@
 - 누구와 함께, 또는 혼자 여행을 떠나고 싶은 사람들을 위한 캠핑 예약 사이트를 만들었습니다.
 
 ## **트러블 슈팅**
-- 개발하는 과정에서의 문제 해결 과정, 팀원들과의 협업과정을 담았습니다.
+- 개발하는 과정에서의 문제 해결 과정
 https://github.com/simDev1234/camping101/blob/main/TROUBLE_SHOOTING.md
+- 팀원들과의 협업 과정을 보고 싶다면 (아래 상세 설명으로)
+https://simdev1234.notion.site/101-101-836fcb761f614b2e8702e0ed2c1c55d0?pvs=4
 
 ## **담당 역할**
 - Spring Security + Jwt + OAuth를 사용하여 회원 기능 구현 
