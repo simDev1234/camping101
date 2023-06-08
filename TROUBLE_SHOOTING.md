@@ -109,7 +109,7 @@ public boolean supports(Class<?> authentication) {
 - 원인 : Spring Security의 CorsConfigurationSource 클래스의 corsConfiguration.setAllowedMethod() 내부에 PUT 메소드를 허용하지 않아 발생하는 이슈였다. <br>
 - 해결 : PUT 메소드를 추가해주니 바로 해결될 수 있었다.<br>
   웹은 기본적으로 SOP(Same Origin Policy = 동일 출처 정책)를 따랐다. 이 때 말하는 Origin이란, Procotol + Host + Port를 말하는 것으로, http://www.naver.com:8080 까지를 의미한다. <br>
-  * http가 protocol, Host가 www.naver.com, Port가 8080 <br>
+  (여기서 http가 protocol, Host가 www.naver.com, Port가 8080이다.) <br>
   웹이 기본적으로 SOP를 따르는 이유는 보안 때문이다. 서로 다른 Origin(출처)에서 Resource(자료 - 문서 - 데이터)를 주고받게 되면 해킹의 위험이 생길 수 있다. <br>
   따라서 웹은 SOP 정책을 따르는데, 이렇게 할 경우 Client-Server로 데이터가 오고가는 상황에서 제약이 발생하게 된다. <br>
   이 부분을 해결하기 위해 Cors(Cross-Origin Resource Policy = 교차 출처 정책)을 사용한다. Cors 설정에 대한 메소드를 하나씩 보면 아래와 같다 <br> 
