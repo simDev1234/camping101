@@ -40,7 +40,10 @@ logging system failed to initialize using configuration from 'null'
   ```
   위 내용은 사용자가 root이며, 그룹이 root임을 의미했다. <br>
   기본적으로 Linux서버에서는 root만 파일의 생성 권한을 갖는다.  <br> 
-  이 상태에서 java -jar beta(생략).jar 를 입력하면 같은 에러가 나타났다. <br>
+  이 상태에서 java -jar beta(생략).jar 를 입력하면 아래와 같은 에러가 나타난다. <br>
+  ```bash
+  logging system failed to initialize using configuration from 'null'
+  ```
   이번에는 배포 그룹을 생성해서 현재 접속한 사용자(ubuntu)를 그룹에 포함하고 해당 그룹에 libs 디렉토리에 대한 권한을 부여했다. <br>
   ```bash
   sudo groupadd deployer
