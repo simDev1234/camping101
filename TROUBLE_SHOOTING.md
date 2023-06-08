@@ -105,7 +105,7 @@ public boolean supports(Class<?> authentication) {
 
 <br>
 
-## ISSUE 6 : 프론트에서 PUT 메소드로 요청 시, No Access-Control-Allow-Origin 500 에러가 발생
+## ISSUE 5 : 프론트에서 PUT 메소드로 요청 시, No Access-Control-Allow-Origin 500 에러가 발생
 - 원인 : Spring Security의 CoursConfigurationSource 클래스의 corsConfiguration.setAllowedMethod() 내부에 PUT 메소드를 허용하지 않아 발생하는 이슈였다. <br>
 - 해결 : PUT 메소드를 추가해주니 바로 해결될 수 있었다.<br>
   웹은 기본적으로 SOP(Same Origin Policy = 동일 출처 정책)를 따랐다. 이 때 말하는 Origin이란, Procotol + Host + Port를 말하는 것으로, http://www.naver.com:8080 까지를 의미한다. <br>
@@ -138,7 +138,7 @@ public boolean supports(Class<?> authentication) {
 
 <br>
  
-## ISSUE 5 : GET 요청 시 아래와 같은 예외 발생
+## ISSUE 6 : GET 요청 시 아래와 같은 예외 발생
 ```bash
 [http-nio-8080-exec-7] org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver Resolved 
 [org.springdiaTypeNotSupportedException: Content type 'application/x-www-form-urlencoded;charset=UTF-8' not supported]
@@ -183,7 +183,7 @@ public boolean supports(Class<?> authentication) {
 
 <br>
 
-## ISSUE 6 : Swagger 요청 시 400 에러
+## ISSUE 7 : Swagger 요청 시 400 에러
 ![img.png](.github/img/swagger-error.png)
 - 원인 : "/webjars" 하위 경로에 대한 접근 허용 X 
 - 해결 : swagger의 WebSecurity ignore 경로의 "/webjars/"를 "/webjars/**"로 변경 
