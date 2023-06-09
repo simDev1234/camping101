@@ -16,6 +16,3 @@ https://simdev1234.notion.site/101-101-836fcb761f614b2e8702e0ed2c1c55d0?pvs=4
 - AWS EC2(ubuntu)를 통해 서버 배포
 - AWS RDS 관리, AWS S3에 데이터를 저장/조회하는 클래스 작업
 - Swagger 및 Logback을 통한 API/Log 문서화
-
-## **Link**
-- Backend API Document : http://52.78.245.43:8080/swagger-ui/index.html
